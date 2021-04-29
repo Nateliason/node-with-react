@@ -1,19 +1,11 @@
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('./config/keys');
+require('./services/passport');
 
 const app = express();
 
-passport.use(
-  new GoogleStrategy({
-    clientID: keys.googleClientID,
-    clientSecret: keys.googleClientSecret,
-    callbackURL: '/auth/google/callback'
-  }, (accessToken) => {
-    console.log(accessToken);
-  })
-);
+// This is the same as putting the require in a variable then calling that variable. Nifty!
+require('./routes/authRoutes')(app);
 
+// This lets Heroku set the Port and uses 5000 as a fallback locally
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
